@@ -76,7 +76,7 @@ module.exports = function(grunt) {
         ]
       },
       css: {
-        files: 'public/*.css',
+        files: 'public/style.css',
         tasks: ['cssmin']
       }
     },
@@ -117,6 +117,8 @@ module.exports = function(grunt) {
   grunt.registerTask('test', ['jshint', 'mochaTest']);
 
   grunt.registerTask('build', ['mochaTest','concat', 'uglify', 'cssmin']);
+
+  grunt.registerTask('css', 'cssmin');
 
   grunt.registerTask('upload', function(n) {
     if(grunt.option('prod')) {
