@@ -36,8 +36,10 @@ module.exports = function(grunt) {
     },
 
     uglify: {
-        src: 'public/dist/production.js',
-        dest: 'public/dist/production.min.js'
+      dest:{
+        files: {
+          'public/dist/production.min.js' : ['public/dist/production.js']
+        }
       }
     },
 
@@ -81,6 +83,7 @@ module.exports = function(grunt) {
 
     shell: {
       prodServer: {
+        command: 'git add . && git commit -m "Changes have been made" && git push azure master'
       }
     },
   });
@@ -111,22 +114,14 @@ module.exports = function(grunt) {
   // Main grunt tasks
   ////////////////////////////////////////////////////
 
-  grunt.registerTask('test', [
-    'jshint',
-    'mochaTest'
-  ] function(){
-    if(err){
-      console.log(err);
-      return false;
-    }
-  });
+  grunt.registerTask('test', ['jshint', 'mochaTest']);
 
-  grunt.registerTask('build', [
-  ]);
+  grunt.registerTask('build', ['mochaTest','concat', 'uglify', 'cssmin']);
 
   grunt.registerTask('upload', function(n) {
     if(grunt.option('prod')) {
       // add your production server task here
+      grunt.task.run('shell');
     } else {
       grunt.task.run([ 'server-dev' ]);
     }
@@ -134,6 +129,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('deploy', [
     // add your deploy tasks here
+    'test', 'build'
   ]);
 
 
